@@ -58,10 +58,34 @@ def algoritma_afdeling_lain(df, kapasitas_kva=80):  # kapasitas default sementar
     else:
         return np.nan
 
-# Streamlit Web UI
+st.image("akartha_energy_logo.jpeg", width=200) 
+
 st.title("🔧 Perhitungan Koefisien & Konsumsi BBM Genset")
 
-lokasi = st.selectbox("Pilih lokasi site:", ["Emplasmen Utama", "Afdeling Lain"])
+# Pilih Project
+project = st.selectbox("Pilih Project:", ["Alpha", "Bravo"])
+
+# Pilih Site berdasarkan Project
+if project == "Alpha":
+    lokasi = st.selectbox("Pilih lokasi site:", [
+        "Alpha - Emplasmen Utama",
+        "Alpha - Afdelling 1&2",
+        "Alpha - Afdelling 3&5",
+        "Alpha - Afdelling 4&6"
+    ])
+elif project == "Bravo":
+    lokasi = st.selectbox("Pilih lokasi site:", [
+        "Bravo - FLE 1",
+        "Bravo - FLE 2",
+        "Bravo - FLE 3",
+        "Bravo - FLE 4",
+        "Bravo - FLE 5 / SGE Emplasmen Utama & 1",
+        "Bravo - SGE 2",
+        "Bravo - SGE 3",
+        "Bravo - SGE 4",
+        "Bravo - SGE 5"
+    ])
+
 
 hm_awal = st.number_input("Masukkan Hour Meter Awal (HM Awal)", value=0.0)
 hm_akhir = st.number_input("Masukkan Hour Meter Akhir (HM Akhir)", value=0.0)
@@ -72,7 +96,7 @@ if uploaded_file is not None:
     try:
         df = pd.read_csv(uploaded_file)
 
-        if lokasi == "Emplasmen Utama":
+        if lokasi == "Alpha - Emplasmen Utama":
             koef = algoritma_emplasmen_utama(df)
         else:
             koef = algoritma_afdeling_lain(df)  # kapasitas_kva bisa dibuat dropdown di tahap berikutnya
