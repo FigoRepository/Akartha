@@ -31,9 +31,8 @@ def algoritma_emplasmen_utama(df):
     else:
         return np.nan
 
-def algoritma_fle_emplasmen_utama(file_path):
+def algoritma_fle_emplasmen_utama(df):
     # baca excel
-    df = pd.read_excel(file_path, header=3) 
     load_active = (df["Active power(W)"].abs())/1000
     
     kapasitas_kw = 109
@@ -132,6 +131,7 @@ if uploaded_file is not None:
             koef = algoritma_emplasmen_utama(df)
 
         elif lokasi == "Bravo - FLE EU":
+            df = pd.read_excel(uploaded_file, header=3) 
             koef = algoritma_fle_emplasmen_utama(df)
         else:
             koef = algoritma_afdeling_lain(df)  # kapasitas_kva bisa dibuat dropdown di tahap berikutnya
@@ -144,6 +144,7 @@ if uploaded_file is not None:
 
     except Exception as e:
         st.error(f"❌ Terjadi error saat memproses data: {e}")
+
 
 
 
