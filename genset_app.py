@@ -120,8 +120,8 @@ elif project == "Bravo":
 hm_awal = st.number_input("Masukkan Hour Meter Awal (HM Awal)", value=0.0)
 hm_akhir = st.number_input("Masukkan Hour Meter Akhir (HM Akhir)", value=0.0)
 
-if lokasi == "Bravo - FLE EU" or "Bravo - FLE 1":
-    uploaded_file = st.file_uploader("Upload File Data Beban per Jam (excel) dari fusionsolar", type=["xlsx", "xls"])
+if lokasi in ["Bravo - FLE EU", "Bravo - FLE 1"]:
+    uploaded_file = st.file_uploader("Upload File Data Beban per Jam (Excel) dari FusionSolar", type=["xlsx", "xls"])
 else:
     uploaded_file = st.file_uploader("Upload File Data Beban per Jam (CSV) dari iSolarcloud", type=["csv"])
 
@@ -145,5 +145,6 @@ if uploaded_file is not None:
 
     except Exception as e:
         st.error(f"❌ Terjadi error saat memproses data: {e}")
+
 
 
