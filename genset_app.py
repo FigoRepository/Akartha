@@ -31,6 +31,36 @@ def algoritma_emplasmen_utama(df):
     else:
         return np.nan
 
+def algoritma_fle_emplasmen_utama(file_path):
+    # baca excel
+    df = pd.read_excel(file_path, header=3) 
+    load_active = (df["Active power(W)"].abs())/1000
+    
+    kapasitas_kw = 109
+
+    def hitung_faktor(load):
+        if load == 0:
+          return 0
+        elif load <= 0.25 * kapasitas_kw:
+            return 9
+        elif load <= 0.5 * kapasitas_kw:
+            return 9 + (load - 0.25 * kapasitas_kw) * (15 - 9) / (0.25 * kapasitas_kw)
+        elif load <= 0.75 * kapasitas_kw:
+            return 15 + (load - 0.5 * kapasitas_kw) * (23 - 15) / (0.25 * kapasitas_kw)
+        elif load <= kapasitas_kw:
+            return 23 + (load - 0.75 * kapasitas_kw) * (26 - 23) / (0.25 * kapasitas_kva)
+        else:
+            return np.nan
+
+    # apply fungsi ke setiap nilai load_active
+    koef_genset = load_active.apply(hitung_faktor)
+
+    # filter hanya load > 0
+    koef_nonzero = koef_genset[load_active > 0]
+
+    # return rata-rata (tanpa nilai 0)
+    return koef_nonzero.mean()
+
 def algoritma_afdeling_lain(df, kapasitas_kva=80):  # kapasitas default sementara
     time_col = df.columns[0]
     load_col = df.columns[1]
@@ -76,7 +106,7 @@ if project == "Alpha":
 elif project == "Bravo":
     lokasi = st.selectbox("Pilih lokasi site:", [
         "Bravo - FLE 1",
-        "Bravo - FLE 2",
+        "Bravo - FLE EU",
         "Bravo - FLE 3",
         "Bravo - FLE 4",
         "Bravo - FLE 5 / SGE Emplasmen Utama & 1",
@@ -98,6 +128,9 @@ if uploaded_file is not None:
 
         if lokasi == "Alpha - Emplasmen Utama":
             koef = algoritma_emplasmen_utama(df)
+
+        elif lokasi == "Bravo - FLE EU":
+            koef = algoritma_fle_emplasmen_utama(df)
         else:
             koef = algoritma_afdeling_lain(df)  # kapasitas_kva bisa dibuat dropdown di tahap berikutnya
 
@@ -109,3 +142,4 @@ if uploaded_file is not None:
 
     except Exception as e:
         st.error(f"❌ Terjadi error saat memproses data: {e}")
+
