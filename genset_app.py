@@ -1,4 +1,4 @@
-import streamlit as st
+simport streamlit as st
 import pandas as pd
 import numpy as np
 
@@ -132,7 +132,6 @@ if uploaded_file is not None:
             koef = algoritma_emplasmen_utama(df)
 
         elif lokasi == "Bravo - FLE EU":
-            df = pd.read_excel(uploaded_file)
             koef = algoritma_fle_emplasmen_utama(df)
         else:
             koef = algoritma_afdeling_lain(df)  # kapasitas_kva bisa dibuat dropdown di tahap berikutnya
@@ -145,6 +144,7 @@ if uploaded_file is not None:
 
     except Exception as e:
         st.error(f"❌ Terjadi error saat memproses data: {e}")
+
 
 
 
