@@ -127,12 +127,12 @@ else:
 
 if uploaded_file is not None:
     try:
-        df = pd.read_csv(uploaded_file)
-
         if lokasi == "Alpha - Emplasmen Utama":
+            df = pd.read_csv(uploaded_file)
             koef = algoritma_emplasmen_utama(df)
 
         elif lokasi == "Bravo - FLE EU":
+            df = pd.read_excel(uploaded_file)
             koef = algoritma_fle_emplasmen_utama(df)
         else:
             koef = algoritma_afdeling_lain(df)  # kapasitas_kva bisa dibuat dropdown di tahap berikutnya
@@ -145,6 +145,7 @@ if uploaded_file is not None:
 
     except Exception as e:
         st.error(f"❌ Terjadi error saat memproses data: {e}")
+
 
 
 
